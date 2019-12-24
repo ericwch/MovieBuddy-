@@ -9,6 +9,10 @@
 <body>
     <h1>MovieFriends!!</h1>
     <br>
+    <% if (user) {%> 
+        <h2>logged in as <%= user.username%></h2>
+    <% } %>
+    <br>
     <a href = '/moviemeet/' method> Show All</a> 
     <br>
     <%- body %>

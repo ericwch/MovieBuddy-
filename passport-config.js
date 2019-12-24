@@ -6,6 +6,9 @@ const initialize = function(passport, getUserByUserName, getUserbyId){
         let user;
         try{
             user = await getUserByUserName(username)
+            console.log(user)
+            console.log(password)
+            console.log(typeof(user))
             if (await bcrypt.compare(password, user.password)){
                 return done(null, user)
             }
@@ -21,10 +24,11 @@ const initialize = function(passport, getUserByUserName, getUserbyId){
 
         }   
     }
-
+    
+    
     passport.use(new localStrategy(authenticateUser))
     passport.serializeUser((user, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => {return done(null, getUserbyId(id))})
+    passport.deserializeUser(async (id, done) => {return done(null, await getUserbyId(id))})
 
 }
 

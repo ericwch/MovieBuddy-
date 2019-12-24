@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js authServer.js",
-    "devStart": "nodemon server.js authServer.js",
-    "devStart-auth": "nodemon authServer.js"
+    "devStart": "nodemon authServer.js & nodemon server.js ",
+    "devStart-auth": "nodemon authServer.js",
+    "devStart-ser": "nodemon server.js "
   },
   "keywords": [],
   "author": "",

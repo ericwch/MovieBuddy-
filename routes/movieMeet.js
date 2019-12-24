@@ -81,5 +81,24 @@ router.delete("/:id", async(req, res) => {
 
     }
 })
+
+function checkAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+        next()
+    }
+    else{
+        res.status(401)
+    }
+}
+
+function checkUnauthenticated(req, res, next){
+    if(!req.isAuthenticated()){
+        next()
+    }
+    else{
+        res.status(401)
+    }
+}
+
 module.exports = router
 

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose')
 
-const movieMeetSchema = new mongoose.Schema({
+const movieMeetSchema = new mongoose.Schema(
+    
+    
+    
+    
+    {
+    
     movieTitle: {
         type: String,
         required: true
@@ -17,7 +23,7 @@ const movieMeetSchema = new mongoose.Schema({
     },
 
     participants: {
-        type: [String],
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
         required: true,
         
     }

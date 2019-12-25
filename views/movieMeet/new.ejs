@@ -1,17 +1,127 @@
 <div>
     <form action='/moviemeet/new' method = 'POST'>
-        <label>movietitle</label>
+        <label>movietitle:</label>
         <input type = 'text' name = 'movieTitle' value = '<%= movieDate.movieTitle%>'>
         <br>
-        <label>date</label>
+        <label>date:</label>
         <input type = 'date' name = 'date' value = '<%= movieDate.date%>'>
         <br>
-        <label>cinema</label>
-        <input type = 'text' name = 'cinema' value = '<%= movieDate.cinema%>'>
+        <label>cinema:</label>
+        <label id = "cinema"></label>
+        <input type = 'hidden' id = 'cinema_input' name = 'cinema' value = '<%= movieDate.cinema%>'>
         <br>    
-        <label>participant</label>
-        <input type = 'text' name = 'participant' value = '<%= movieDate.participant %>'> 
-    
+
     <button type = "submit" >Make!</button>
     </form>
 </div>
+<div id="map" style = "height: 50%; width: 50%;"></div>
+
+<script>
+    
+    var map, infoWindow;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+      });
+
+      infoWindow = new google.maps.InfoWindow;
+
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          infoWindow.setPosition(pos);
+          infoWindow.setContent('Location found.');
+          infoWindow.open(map);
+          map.setCenter(pos);
+
+          request = {
+            location: pos,
+            rankBy: google.maps.places.RankBy.DISTANCE,
+            type: "movie_theater",
+            
+
+          }
+          service = new google.maps.places.PlacesService(map);
+          service.nearbySearch(request, function(results, status){
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                  for (var i = 0; i < results.length; i++) {
+                    var marker = new google.maps.Marker({
+                      position: results[i].geometry.location,
+                      map: map
+                    })
+                    marker.index = i
+                    marker.addListener('click', function(){
+                      
+                      console.log(results[this.index])
+                      document.getElementById("cinema").innerText = results[this.index].name
+                      document.getElementById("cinema_input").value = results[this.index].name
+                    }
+                    )
+                  }
+                    
+                    
+                    
+                  
+                }
+              
+          })
+
+
+          /*
+          params = new URLSearchParams()
+          params.append("key", "<%=process.env.GOOGLE_API_KEY%>")
+          params.append("location", `${pos.lat}`+','+`${pos.lng}`)
+          params.append("rankby", "distance")
+          params.append("type", "movie_theater")
+          params.append("maxprice", "1")
+          
+          
+          const proxyurl = "https://cors-anywhere.herokuapp.com/"
+          const placeApiUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+
+          fetch(proxyurl + placeApiUrl, {
+              method: "POST",
+              body: params
+          }).then(
+              res => {
+                  console.log(params.toString())
+                  return res.json()
+              }
+              ).then(
+                json => {
+                  console.log(json)
+                }
+              )
+                  
+                  
+                */
+          
+          
+          
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+                            'Error: The Geolocation service failed.' :
+                            'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.open(map);
+    }
+  
+  
+  </script>
+  <script src='https://maps.googleapis.com/maps/api/js?key=<%= process.env.GOOGLE_API_KEY %>&callback=initMap&libraries=places'
+  async defer></script>

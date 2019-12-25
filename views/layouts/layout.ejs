@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        
+        html, body {
+          height: 100%;
+          
+        }
+      </style>
     <title>MovieFriends</title>
 </head>
 <body>
@@ -13,7 +20,15 @@
         <h2>logged in as <%= user.username%></h2>
     <% } %>
     <br>
-    <a href = '/moviemeet/' method> Show All</a> 
+    <a href = 'http://localhost:3000/moviemeet' > Show All</a> 
+    <% if (!user) {%> 
+        <a href = 'http://localhost:4000/register'>register</a>
+        <a href = 'http://localhost:4000/login'>login</a>
+
+    <% }else{%>
+        <a href = '/moviemeet/new'>create movie meet!</a>
+        <a href = 'http://localhost:4000/logout'>logout</a>
+    <% }%>
     <br>
     <%- body %>
 </body>

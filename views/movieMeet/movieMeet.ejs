@@ -1,25 +1,36 @@
+
+
 <h1>movies!</h1>
 
 <% movieMeets.forEach( movieMeet => { %>
-
+    
     <form action = <%='/moviemeet/'+movieMeet.id +'?_method=DELETE'%> method = 'POST'>
         <button type = "submit">delete!</button>
     </form>
 
-    <form action = <%='/moviemeet/'+movieMeet.id +'?_method=PUT'%> method = 'POST'>
-        <input type = 'text' name = 'newParticipant'>
-        <button type = "submit">Join!</button>
-    </form>
-    
+    <% if(user && !movieMeet.isUserIn(user)){ %>
+        
+        <form action = <%='/moviemeet/'+movieMeet.id +'?_method=PUT'%> method = 'POST'>
+            <button type = "submit">Join!</button>
+        </form>
+    <% }else if (!user){%>
+        <div>you need to login first!</div>
+    <% } else{%>
+        <div>You have joined this movie meet</div>
+    <% } %>
     <div><a href =  <%='/moviemeet/'+movieMeet.id %>> <%=movieMeet.movieTitle%></a></div>
     
     <div><%=movieMeet.date.toDateString()%></div>
     
     <div><%=movieMeet.cinema%></div>
     
-    <div><%=movieMeet.participants%></div>
+    <div><%=movieMeet.participants_name%></div>
 
     <br>
-<% }) %>
+
+    
+ <% }) %>
+    
+
 
 

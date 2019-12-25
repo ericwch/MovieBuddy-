@@ -8,6 +8,8 @@ const expressLayouts = require('express-ejs-layouts')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 
+const flash = require('express-flash')
+
 const passport = require('passport')
 const session = require('express-session')
 const initialize = require("./passport-config")
@@ -30,6 +32,7 @@ const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
 
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -37,13 +40,15 @@ app.use(session({
     saveUninitialized: false
 }))
 
+app.use(flash())
+
 passport.deserializeUser(async (id, done) => {return done(null, await User.findById(id))})
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use((req, res, next) => {
     res.locals.user = req.user
-    console.log(req.cookies)
-    console.log(req.user)
+    
     next()
 })
 

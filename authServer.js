@@ -45,7 +45,7 @@ app.use(passport.session());
 /* load the user info (if logged in) to res.locals for the views to display the logged in user */
 app.use((req, res, next) => {
     res.locals.user = req.user
-    console.log(req.user)
+    
     next()
 })
 
@@ -67,9 +67,12 @@ app.get("/register", checkUnauthenticated, (req,res) => {
 app.post("/register", checkUnauthenticated, async (req, res) => {
     
     try {
-        if(await User.find({username: req.body.username})){
-            req.flash("error", "username has been registered")
+        
+        if (await User.findOne({username: req.body.username})) {
+
+            req.flash("error", `username ${req.body.username} has been registered`)
             return res.render("auth/register")
+            
         }
         const hashedPassword = await bcrypt.hash(req.body.password,12)
         const newUser = new User({
@@ -90,6 +93,7 @@ app.post("/register", checkUnauthenticated, async (req, res) => {
 app.get("/logout", (req,res) =>{
     req.session.destroy()
     console.log("logged out!")
+    res.redirect("http://localhost:3000/moviemeet")
 })
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
@@ -103,13 +107,13 @@ function checkAuthenticated(req, res, next){
 
 function checkUnauthenticated(req, res, next){
     if(!req.isAuthenticated()){
-        console.log(req.user)
+        
         next()
     }
     else{
         
-        console.log(req.user)
-        console.log(req.isAuthenticated())
+        
+        console.log("plz log out")
         res.status(401)
     }
 }

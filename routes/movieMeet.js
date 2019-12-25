@@ -1,20 +1,23 @@
 const express = require('express')
 const router = express.Router()
 const MovieMeet = require('../models/movieMeet')
+const flash = require("express-flash")
+const fetch = require("node-fetch")
 
 router.get("/", async (req, res) => {
     try {
         movieMeets = await MovieMeet.find()
-        console.log(movieMeets)
+        
         res.render('movieMeet/movieMeet', {movieMeets: movieMeets, test: 111111} )
     }
-    catch{
+    catch(err){
+        console.log(err)
         res.redirect('/')
     }
     
 })
 
-router.get("/new", (req, res) => {
+router.get("/new", checkAuthenticated,(req, res) => {
     res.render("movieMeet/new", { movieDate: new MovieMeet()})
 })
 
@@ -26,7 +29,8 @@ router.post("/new", async (req, res) => {
         movieTitle: req.body.movieTitle,
         date: req.body.date,
         cinema: req.body.cinema,
-        participants: [req.body.participant]
+        participants_id: [req.user._id],
+        participants_name: [req.user.username]
 
     })
     console.log('make!')
@@ -47,12 +51,15 @@ router.get("/:id", (req, res) => {
     
 })
 
-router.put("/:id", async(req, res) => {
+router.put("/:id", checkAuthenticated,async(req, res) => {
     let movieMeet
     try{
         await MovieMeet.updateOne(
             {_id: req.params.id},
-            {$push: {participants: req.body.newParticipant}}
+            {$push: {
+                participants_id: req.user._id,
+                participants_name: req.user.username
+            }}
         )
         res.redirect('/moviemeet/')
     }
@@ -63,7 +70,7 @@ router.put("/:id", async(req, res) => {
 })
 router.delete("/:id", async(req, res) => {
     let movieMeet
-    console.log(req.params.id)
+    
     try{
         movieMeet = await MovieMeet.findById(req.params.id)
         await movieMeet.remove()
@@ -87,7 +94,8 @@ function checkAuthenticated(req, res, next){
         next()
     }
     else{
-        res.status(401)
+        req.flash("error", "please log in to start or join a movie meet!")
+        res.redirect("http://localhost:4000/login")
     }
 }
 
@@ -99,6 +107,7 @@ function checkUnauthenticated(req, res, next){
         res.status(401)
     }
 }
+
 
 module.exports = router
 

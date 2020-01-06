@@ -16,8 +16,8 @@ const bcrypt = require('bcrypt')
 const User = require("./models/user")
 initialize(
         passport, 
-        async user => {return ( User.findOne({username: user}))},
-        async id => {return (await User.findById(id))}
+        user => {return ( User.findOne({username: user}))},
+        id => {return ( User.findById(id))}
 )
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get("/login", (req, res) =>{
+app.get("/login", checkUnauthenticated, (req, res) =>{
     res.render("auth/login")
 })
 
@@ -114,7 +114,10 @@ function checkUnauthenticated(req, res, next){
         
         
         console.log("plz log out")
+        
         res.status(401)
+
+        res.redirect("http://localhost:3000/moviemeet")
     }
 }
 app.listen(process.env.PORT || 4000)

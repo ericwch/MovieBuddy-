@@ -1,50 +1,3 @@
-
-<div class = "movieCotainer">
-    <% var i=0; %>
-    <% movies.forEach(movie => { %>
-        <% i++ %>
-        <% if (i >8) {return false} %>
-        <div class = "movieItem" data-movie-id = "<%=movie.id%>" data-movie-title = "<%=movie.title%>">
-          <div><%=movie.title%></div>
-          <img src = "/img/<%=movie.id%>.jpg" >
-        </div>
-
-    <%})%>
-</div>
-<div class = "optionCotainer">
-<div class = "showtimeCotainer" id = "showtimeItems"></div>
-<div class = "formCotainer">
-    <% if (locals.errorMessage) { %>
-    <h4>  <%= errorMessage %>  </h4>
-    <% } %>
-
-    
-    <form action='/moviemeet/new' method = 'POST'>
-        <label>movietitle:</label>
-        <label id = "movieTitle"><%= movieMeet.movieTitle%></label>
-        <input type = 'hidden' name = "movieTitle"id = 'movieTitle_input' value = '<%= movieMeet.movieTitle%>'>
-        <input type = 'hidden' name = "movieId" id = 'movieId_input' value = '<%= movieMeet.movieId%>'>
-        <br>
-        <label>date:</label>
-        <input type = 'date' name = 'date' id = "date_input" value = '<%= date == null ? "2019-12-29": date%>'>
-        <label>showtime:</label>
-        <label id = "showtime"></label>
-        <input type = "hidden" name = "showtime" id = "showtime_iput" value = '<%= movieMeet.date == null ? "": movieMeet.showtime.toISOString().split("T")[0]%>'>
-        <br>
-        <label>cinema:</label>
-        <label id = "cinema">'<%= movieMeet.cinema%>'</label>
-
-        <input type = 'hidden' id = 'cinema_input' name = 'cinema' value =" <%= movieMeet.cinema%>">
-        <input type = 'hidden' id = 'cinemaLat_input' name = 'cinemaLat' value =" <%= movieMeet.cinemaLat%>">
-        <input type = 'hidden' id = 'cinemaLng_input' name = 'cinemaLng' value =" <%= movieMeet.cinemaLng%>">
-        <br>    
-    
-    <button type = "submit" >Make!</button>
-    </form>
-</div>
-
-<div id="map" style = "height: 70%; width: 70%;"></div>
-</div>
 <script>
     
     var map, infoWindow
@@ -55,7 +8,7 @@
       map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -37.798589799999995, lng: 144.9597391},
         zoom: 13
-      });
+      })
 
       infoWindow = new google.maps.InfoWindow;
 

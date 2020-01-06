@@ -33,6 +33,9 @@ db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
 
 
+
+
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -48,7 +51,6 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
     res.locals.user = req.user
-    
     next()
 })
 
@@ -57,7 +59,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 
 app.use(expressLayouts)
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'));
 
 
 app.use('/', indexRouter)

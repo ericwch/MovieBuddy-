@@ -14,13 +14,13 @@
             <button type = "submit">Join!</button>
         </form>
     <% }else if (!user){%>
-        <div>you need to login first!</div>
+        <div>you need to login to join!</div>
     <% } else{%>
         <div>You have joined this movie meet</div>
     <% } %>
     <div><a href =  <%='/moviemeet/'+movieMeet.id %>> <%=movieMeet.movieTitle%></a></div>
     
-    <div><%=movieMeet.date.toDateString()%></div>
+    <div><%=movieMeet.showtime.toDateString()%></div>
     
     <div><%=movieMeet.cinema%></div>
     
@@ -31,6 +31,4 @@
     
  <% }) %>
     
-
-
 

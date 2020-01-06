@@ -12,7 +12,13 @@ const movieMeetSchema = new mongoose.Schema(
         required: true
     },
 
-    date: {
+    movieId:{
+        type: Number,
+        required: true
+
+    },
+
+    showtime: {
         type: Date,
         required: true
     },
@@ -31,8 +37,17 @@ const movieMeetSchema = new mongoose.Schema(
     participants_name: {
         type: [String],
         required: true
+    },
+
+    cinemaLat: {
+        type: Number,
+        required: true
+    },
+
+    cinemaLng: {
+        type: Number,
+        required: true
     }
-    
 })
 
 const MovieMeet = mongoose.model('movieMeet',movieMeetSchema)

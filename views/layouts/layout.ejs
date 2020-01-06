@@ -4,32 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        
-        html, body {
-          height: 100%;
-          
-        }
-      </style>
     <title>MovieFriends</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel = "stylesheet" href = "/stylesheets/main.css">
 </head>
 <body>
+    <div class = "topbar">
     <h1>MovieFriends!!</h1>
-    <br>
-    <% if (user) {%> 
-        <h2>logged in as <%= user.username%></h2>
-    <% } %>
-    <br>
-    <a href = 'http://localhost:3000/moviemeet' > Show All</a> 
-    <% if (!user) {%> 
-        <a href = 'http://localhost:4000/register'>register</a>
-        <a href = 'http://localhost:4000/login'>login</a>
+    </div>
+    <div class = "topnav">
 
-    <% }else{%>
-        <a href = '/moviemeet/new'>create movie meet!</a>
-        <a href = 'http://localhost:4000/logout'>logout</a>
-    <% }%>
-    <br>
+        <% if (user) {%> 
+            <a class = "user_nav_button" href = 'http://localhost:4000/logout'>logout</a>
+        <% }else{%>
+            <a class = "user_nav_button" href = 'http://localhost:4000/register'>register</a>
+            <a class = "user_nav_button" href = 'http://localhost:4000/login'>login</a>
+        <% } %>
+
+    <a href = 'http://localhost:3000/moviemeet' > Show All</a> 
+    <a href = '/moviemeet/new'>create movie meet!</a>
+    </div>
+    
     <%- body %>
 </body>
 </html>
+

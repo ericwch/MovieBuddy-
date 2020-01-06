@@ -1,0 +1,108 @@
+@import "shared/var.css";
+
+* {
+    margin: 0;
+    padding: 0; }
+
+
+:root {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    /*background-color: var(--light-bg-color)*/
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    border: 0;
+    outline: 0;
+}
+
+
+.topbar{
+    background-color: var(--main-bg-color);
+    height: 10%;
+    width: 100%;
+    overflow: hidden
+}
+
+.topbar h1{
+    padding: 16px 16px;
+}
+.topnav{
+
+    background-color: var(--light-bg-color);
+    overflow: hidden;
+    height: 5;
+    width: 100%;
+    box-shadow: 0 4px 3px -2px gray
+
+}
+
+.topnav a{
+
+    padding: 14px 16px;
+    float: left
+}
+
+.topnav a.user_nav_button{
+    float: right
+}
+
+.movieCotainer{
+    overflow: hidden;
+    background-color: rgb(120, 141, 148, 0.3);
+    height: 30%
+}
+
+.movieItem  {
+    float: left;
+    
+    height:100%;
+    width: 12.5%;
+    
+}
+
+.movieItem img{
+    height: 90%;
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.movieItem div{
+    text-align: center;
+}
+
+.optionCotainer{
+    height:100%;
+    
+}
+.showtimeCotainer{
+    float: left;
+    background-color: lightblue;
+    width: 20%;
+    height: 100%;
+}
+
+.formCotainer{
+    float: right;
+    background-color: lightcyan;
+    width: 70%;
+    
+}
+
+.formCotainer *{
+
+    padding: 0px 16px;
+    
+}
+
+.formCotainer form{
+    padding: 14px;
+}
+

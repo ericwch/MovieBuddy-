@@ -1,0 +1,5 @@
+:root {
+    --main-bg-color: rgb(245, 131, 75);
+    --light-bg-color: rgb(245, 131, 75, 0.5);
+    --lightest-bg-color: rgb(245, 131, 75, 0.25);
+  }

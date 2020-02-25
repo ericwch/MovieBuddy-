@@ -1,0 +1,17 @@
+html{ 
+    overflow-y: scroll; 
+    min-height: 100%;
+}
+body { position: absolute; }
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: blue;
+    width: 100%;
+}
+
+.round-corner {
+    border-radius: 25px;
+}

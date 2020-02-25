@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const MovieMeet = require('../models/movieMeet')
-const cheerio = require('cheerio')
-const rp = require('request-promise')
 
 const mysqlPool = require("../mysql")
 
@@ -11,25 +9,86 @@ router.get("/", async (req, res) => {
         
         const movieMeets = await MovieMeet.find()
         
-        res.render('movieMeet/movieMeet', {movieMeets: movieMeets} )
+        res.send(movieMeets)
+        
     }
     catch(err){
         console.log(err)
+        res.status(404).send()
         
     }
     
 })
 
-router.get("/new", checkAuthenticated, async (req, res) => {
+router.get("/movieinfo", async (req, res) => {
+    try{
+        const movies = new Object
+        var t0 = new Date()
 
-    const movies = await mysqlPool.query("select movie.title, movie.movie_id as id from movie")
+  
 
-    const today = new Date();
-    const date = today.getFullYear()+'-'
-                + String((today.getMonth()+1)).padStart(2, "0") +'-'
-                + String(today.getDate()).padStart(2, "0");
+        
+        const movieinfo = await mysqlPool.query(
+            "select m.movie_id as id, m.title as title,\
+            JSON_ARRAYAGG(json_object('cinema_id', c.cinema_id, 'cinema_name', c.cinema_name, 'showtime', s.showtime)) as cinema\
+            from\
+            (select movie_id, cinema_id, JSON_ARRAYAGG(showtime) as showtime\
+            from showtime\
+            group by movie_id , cinema_id) s\
+            left join cinema c\
+            on c.cinema_id = s.cinema_id\
+            left join movie m \
+            on m.movie_id = s.movie_id\
+            group by id"
+        )
+        
 
-    res.render("movieMeet/new", { movieMeet: new MovieMeet(), date: date, movies: movies})
+
+        
+        
+        
+        console.log(movieinfo)
+    
+        movieinfo.forEach( movie => {
+            
+            movies[movie.id] = {title: movie.title, cinemas : JSON.parse(movie.cinema)}
+            console.log(movies[movie.id].cinemas)
+        }
+
+        )
+        var t1 = new Date()
+        console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
+        console.log(movies)
+        res.send(movies)
+    }
+    catch(err){
+        console.log(err)
+        res.status(404).send()
+    }
+})
+
+router.get("/movieid", async (req, res) => {
+
+    try{
+        
+        const movies = await mysqlPool.query("select movie.title, movie.movie_id as id from movie ")
+        
+        
+
+        /*const today = new Date();
+        const date = today.getFullYear()+'-'
+                    + String((today.getMonth()+1)).padStart(2, "0") +'-'
+                    + String(today.getDate()).padStart(2, "0");*/
+        
+                    
+        res.send(movies)
+    }
+    catch(err){
+
+        console.log(err)
+        res.status(404).send()
+
+    }
 })
 
 
@@ -51,14 +110,12 @@ router.post("/new", async (req, res) => {
     try {
         console.log('make!')
         const newmovieMeet = await movieMeet.save()
-        res.redirect(`/moviemeet/${newmovieMeet.id}`)
+        res.status(204).send()
     }
     catch(err){
         console.log(err)
-        const movies = await mysqlPool.query("select movie.title, movie.movie_id as id from movie")
-
-        res.render("movieMeet/new", { movieMeet: movieMeet, date: req.body.date, 
-            errorMessage: "one or more field is empty", movies: movies})
+        
+        res.status(404).send()
     }
 })
 
@@ -130,15 +187,15 @@ router.delete("/:id", async(req, res) => {
     try{
         movieMeet = await MovieMeet.findById(req.params.id)
         await movieMeet.remove()
-        res.redirect("/moviemeet/")
+        res.status(204).send()
         console.log('removed!')
     }
     catch{
         if (movieMeet == null){
-            res.redirect('/')
+            res.status(404).send({errorMessage: "movieMeet deoesnt exist"})
         }
         else {
-            res.redirect(`/${movieMeet.id}`)
+            res.status(404).send({errorMessage: "delete fail"})
         }
         
 

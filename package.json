@@ -4,10 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js authServer.js",
-    "devStart": "nodemon authServer.js & nodemon server.js ",
-    "devStart-auth": "nodemon authServer.js",
-    "devStart-ser": "nodemon server.js "
+    "start": "node server.js",
+    "devStart": "nodemon server.js "
   },
   "keywords": [],
   "author": "",
@@ -31,6 +29,7 @@
     "request-promise": "^4.2.5"
   },
   "devDependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "nodemon": "^2.0.1"
   }

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 
 const initialize = function(passport, getUserByUserName, getUserbyId){
     const authenticateUser = async( username, password, done) => {
+        
         let user;
         try{
             user = await getUserByUserName(username)

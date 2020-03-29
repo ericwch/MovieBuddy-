@@ -1,18 +1,23 @@
-export const  checkAuthenticated = function (req, res, next){
+module.exports = {
+
+checkAuthenticated :function (req, res, next){
     if(req.isAuthenticated()){
+        
         next()
     }
+
     else{
+        console.log(1234)
         console.log(req.isAuthenticated())
         console.log("not authorized")
-        res.status(401).send()
+        res.redirect("/auth/login")
     }
-}
+},
 
-export const checkUnauthenticated = function(req, res, next){
+checkUnauthenticated : function(req, res, next){
     if(!req.isAuthenticated()){
+        next()
         
-        res.send
     }
     else{
         
@@ -22,4 +27,5 @@ export const checkUnauthenticated = function(req, res, next){
         res.status(401).send()
 
     }
+}
 }

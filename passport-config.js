@@ -7,9 +7,7 @@ const initialize = function(passport, getUserByUserName, getUserbyId){
         let user;
         try{
             user = await getUserByUserName(username)
-            console.log(user)
-            console.log(password)
-            console.log(typeof(user))
+
             if (await bcrypt.compare(password, user.password)){
                 return done(null, user)
             }

@@ -4,7 +4,7 @@
     <%= messages.error %>
   <% } %>
 
-<form action = "/login" method = "POST">
+<form action = "/auth/login" method = "POST">
     
     <label>username</label>
     <input type = "text" name = "username">
@@ -13,4 +13,4 @@
     <button type ="submit">login!</button>
 </form>
 
-<a href = "/register">register</a>
+<a href = "/auth/register">register</a>

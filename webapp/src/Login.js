@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 
-import {login, formToJSON} from "./util"
+import {login} from "./authUtil"
+import {formToJSON} from "./util"
 
 
 const Login = ( props ) => {
     
 
     
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState()
     
 
     const loginHandler = async (event) => {
@@ -17,12 +18,11 @@ const Login = ( props ) => {
         const userFormData = new FormData(event.target)
 
         if(await login(formToJSON(userFormData))){
-            fetch("/", {
-                method: "GET"
-            })
+            props.setIsAuth(true)
         }
         else{
             setErrorMessage("username or password incorrect")
+            props.setIsAuth(false)
         }
 
 
@@ -44,7 +44,7 @@ const Login = ( props ) => {
         <button type ="submit">login!</button>
         </form>
 
-        <div >register</div>
+        
         </div>
         
     );

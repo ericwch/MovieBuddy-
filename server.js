@@ -16,11 +16,15 @@ const passport = require('passport')
 const session = require('express-session')
 const initialize = require("./passport-config")
 
+
+
 initialize(
     passport, 
     user => {return ( User.findOne({username: user}))},
     id => {return ( User.findById(id))}
 )
+
+const authUtil = require("./authUtil")
 
 const indexRouter = require('./routes/index')
 const movieMeetRouter = require('./routes/movieMeet')
@@ -33,9 +37,9 @@ const User = require("./models/user")
 
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
-app.set('layout', 'layouts/layout')
+//app.set('layout', 'layouts/layout')
 
-/*const cors = require('cors')
+/*const cors = require('cors')s
 app.use(cors({
     origin: 'http://localhost:5000',
     credentials: true
@@ -64,24 +68,15 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 
-app.use(expressLayouts)
+//app.use(expressLayouts)
 
 app.use("/public", express.static(__dirname + "/public"))
+app.use("/main-build-static", express.static(__dirname + '/webapp/build'));
 
 
-
-app.get('/', (req, res) => {
-    console.log(req.isAuthenticated())
-    if (req.isAuthenticated()){
-        
-        app.use(express.static(__dirname + '/webapp/build'));
+app.get('/', authUtil.checkAuthenticated, (req, res) => {
+        console.log("go to app page")
         res.sendFile(__dirname + '/webapp/build'+ '/index.html')
-    }
-    else{
-        
-        app.use(express.static(__dirname + "/authapp/build"))
-        res.sendFile(__dirname + '/authapp/build'+ '/index.html')
-    }
 })
 
 

@@ -1,17 +1,16 @@
-html{ 
-    overflow-y: scroll; 
-    min-height: 100%;
-}
-body { position: absolute; }
 
 .footer {
-    position: fixed;
+    
     left: 0;
     bottom: 0;
-    background-color: blue;
+    background-color: rgb(243, 43, 8);
     width: 100%;
 }
 
 .round-corner {
     border-radius: 25px;
+}
+
+body {
+    margin: 0px
 }

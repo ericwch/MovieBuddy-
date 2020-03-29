@@ -3,6 +3,7 @@ const router = express.Router()
 const MovieMeet = require('../models/movieMeet')
 
 const mysqlPool = require("../mysql")
+const checkAuthenticated = require("../authUtil").checkAuthenticated
 
 router.get("/", async (req, res) => {
     try {
@@ -47,18 +48,17 @@ router.get("/movieinfo", async (req, res) => {
         
         
         
-        console.log(movieinfo)
+        
     
         movieinfo.forEach( movie => {
             
             movies[movie.id] = {title: movie.title, cinemas : JSON.parse(movie.cinema)}
-            console.log(movies[movie.id].cinemas)
+            
         }
 
         )
         var t1 = new Date()
-        console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
-        console.log(movies)
+        
         res.send(movies)
     }
     catch(err){
@@ -73,12 +73,6 @@ router.get("/movieid", async (req, res) => {
         
         const movies = await mysqlPool.query("select movie.title, movie.movie_id as id from movie ")
         
-        
-
-        /*const today = new Date();
-        const date = today.getFullYear()+'-'
-                    + String((today.getMonth()+1)).padStart(2, "0") +'-'
-                    + String(today.getDate()).padStart(2, "0");*/
         
                     
         res.send(movies)
@@ -108,7 +102,7 @@ router.post("/new", async (req, res) => {
     })
     console.log(movieMeet)
     try {
-        console.log('make!')
+        console.log('MovieMeet made')
         const newmovieMeet = await movieMeet.save()
         res.status(204).send()
     }
@@ -128,8 +122,7 @@ router.get("/movie/:movie_id/:date", async (req, res) => {
         cinema.latitude, cinema.longitude from showtime natural join cinema \
         where showtime.movie_id = ?", [req.params.movie_id]
         )
-        console.log("===========")
-        console.log(result)
+        
 
         const showtimeObj = new Object()
 
@@ -188,7 +181,7 @@ router.delete("/:id", async(req, res) => {
         movieMeet = await MovieMeet.findById(req.params.id)
         await movieMeet.remove()
         res.status(204).send()
-        console.log('removed!')
+        console.log('movieMeet Removed!')
     }
     catch{
         if (movieMeet == null){
@@ -203,24 +196,7 @@ router.delete("/:id", async(req, res) => {
 })
 
 
-function checkAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
-        next()
-    }
-    else{
-        req.flash("error", "please log in to start or join a movie meet!")
-        res.redirect("http://localhost:4000/login")
-    }
-}
 
-function checkUnauthenticated(req, res, next){
-    if(!req.isAuthenticated()){
-        next()
-    }
-    else{
-        res.status(401)
-    }
-}
 
 
 module.exports = router

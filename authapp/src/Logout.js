@@ -11,7 +11,9 @@ const Logout = (props) => {
 
         logout().then((isLogout) =>{
             if (isLogout){
-                props.setAuth(AuthAction.LOGIN)
+                fetch("/", {
+                    method: "GET"
+                })
             }
             else{
                 return <h2>logout failed</h2>

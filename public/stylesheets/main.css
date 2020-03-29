@@ -60,8 +60,8 @@ html, body {
 .movieItem  {
     float: left;
     
-    height:183px;
-    width: 120px;
+    height:100%;
+    width: 12.5%;
     
 }
 

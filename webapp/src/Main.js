@@ -1,53 +1,48 @@
 import React, {useState, useEffect, useRef} from 'react';
 import Loading from "./Loading"
-import {deleteMovieMeet} from "./movieUtil"
-import {formToJSON} from "./util"
-const Main = () => {
+import {deleteMovieMeet, getMovieMeet} from "./movieUtil"
+import "./public/MovieMeet.css"
+const Main = (props) => {
 
-    const [movieMeetJSX, setMovieMeetJSX] = useState(<Loading/>)
     
-    const deleteHandler = async (ev) => {
+    
+    const deleteHandler = (ev) => {
         
         ev.preventDefault()
 
         const movieMeetId = ev.target.getAttribute("data-movieMeetId")
-        
+
         console.log(movieMeetId)
-        if(await deleteMovieMeet(movieMeetId)){
+
+        deleteMovieMeet(movieMeetId)
+        .then((res) => {
+            if(res.ok){
+                return getMovieMeet()
+            }
+        })
+        .then((movieMeetJSON)=>{
             console.log("deleted")
-        }
-        else{
+            props.setMovieMeets(movieMeetJSON)
+            
+        })
+        .catch(err => {
             console.log("delete fail")
-        }
+            console.log(err)
+        })
 
-
-        }
+            
+    }
     
-    useEffect(() => {
-
-        console.log("Yes!")
-        
             
-            
-            fetch("/moviemeet",{
-                method: "GET",
-                
+       
 
-            }).then((res) => {
-                if(res.ok){
-                    return res.json()
-                }
-            }).then((movieMeetJSON) => {
+    return (
 
-                const movieMeetList = []
-                console.log(movieMeetJSON)
-                movieMeetJSON.forEach( movieMeet => { 
-                    
+        <div id = "moviemeet">
+            {props.movieMeets.map((movieMeet) => (
 
-                    movieMeetList.push(
-                        <div>
+                        <div class = "moviemeet-container">
 
-                        
                         <button onClick =  {(ev) => {deleteHandler(ev)}} data-movieMeetId = {movieMeet._id}>delete!</button>
                     
                 
@@ -60,24 +55,13 @@ const Main = () => {
                         <div>{movieMeet.participants_name}</div>
                         
                         <div>{movieMeet._id}</div>
+
                         </div>
-                    )
-                })
-                setMovieMeetJSX(movieMeetList)
-            }).catch((e)=>{
-                console.log(e)
-            })
-                
-    },[])
-
-    return (
-
-        <div>
-            {movieMeetJSX}
+            ))}
         </div>
 
     )
-}
 
+            }
 export default Main
 

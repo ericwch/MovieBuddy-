@@ -3,28 +3,34 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require("../models/user")
-
+const Auth = require("../authUtil")
+const checkAuthenticated = Auth.checkAuthenticated
+const checkUnauthenticated = Auth.checkUnauthenticated
 module.exports = function(passport){
     
-    router.get("/login", (req, res) =>{
-        console.log(req.user)
-        res.status(204).send()
+    router.get("/login", checkUnauthenticated, (req, res) =>{
+        console.log("go to login page")
+        res.render("auth/login")
     })
+
+
+    
     
     router.post("/login", passport.authenticate('local'), (req,res)=>{
-        console.log(req.user)
-        console.log("redirected")
+        console.log("loggined")
         res.redirect("/")
     })
     
-    router.get("/logout", (req,res) =>{
+    router.get("/logout",checkAuthenticated, (req,res) =>{
+        console.log("logouted")
         req.session.destroy()
-        res.redirect("/")
-        console.log("logged out!")
+        res.redirect("/auth/login")
+        
     })
     
     
     router.get("/register", checkUnauthenticated, (req,res) => {
+        console.log("go to register")
         res.render("auth/register")
     })
     
@@ -59,34 +65,6 @@ module.exports = function(passport){
             res.status(404).send()
         }
     })
-    
-    
-    
-    function checkAuthenticated(req, res, next){
-        if(req.isAuthenticated()){
-            next()
-        }
-        else{
-            console.log(req.isAuthenticated())
-            console.log("not authorized")
-            res.status(401).send()
-        }
-    }
-    
-    function checkUnauthenticated(req, res, next){
-        if(!req.isAuthenticated()){
-            
-            res.send
-        }
-        else{
-            
-            
-            console.log("plz log out")
-            
-            res.status(401).send()
-    
-        }
-    }
     
 
     return router

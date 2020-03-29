@@ -1,6 +1,6 @@
-export const makeMovieMeet = async ( movieMeetObj ) => {
-    try { 
-        let res = await fetch("moviemeet/new", 
+export const makeMovieMeet = async ( movieMeetObj ) => (
+    
+        fetch("moviemeet/new", 
             {
             method: "POST",
             body: JSON.stringify(movieMeetObj),
@@ -9,25 +9,30 @@ export const makeMovieMeet = async ( movieMeetObj ) => {
                 }
             })
 
-            return (res.status == "204")
-    }
-    catch(e){
-        console.log(e)
-        return (false)
-    }
-}
+        
+    
+)
 
-export const deleteMovieMeet = async ( movieMeetId ) => {
-    try { 
-        let res = await fetch(`moviemeet/${movieMeetId}`, 
+export const deleteMovieMeet =  ( movieMeetId ) => (
+    fetch(`moviemeet/${movieMeetId}`, 
             {
             method: "DELETE",
             })
+)
 
-            return (res.status == "204")
-    }
-    catch(e){
-        console.log(e)
-        return (false)
-    }
-}
+export const getMovieMeet = async () => (
+    fetch("/moviemeet",{
+        method: "GET",
+        
+
+    }).then((res) => {
+        if(res.ok){
+            return res.json()
+        }
+    }).then((movieMeetJSON) => {
+
+        
+        console.log(movieMeetJSON)
+        return movieMeetJSON
+    })
+)

@@ -1,25 +1,33 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import MovieOptions from "./MovieOptions"
-import {makeMovieMeet} from "./movieUtil"
+import {makeMovieMeet, getMovieMeet} from "./movieUtil"
 import {formToJSON} from "./util"
 const New = function (props){
     
     const [errorMessage, setErrorMessage] = useState("")
-    const submitHandler = async (ev) => {
+    const submitHandler = (ev) => {
 
         ev.preventDefault()
 
         const movieMeetFormData = new FormData(ev.target)
 
-        if(await makeMovieMeet(formToJSON(movieMeetFormData))){
+        makeMovieMeet(formToJSON(movieMeetFormData))
+        .then((res) => {
+            if(res.ok){
+                return getMovieMeet()
+            }
+        })
+        .then((movieMeetJSON) => {
             props.setNewPopup(false)
-        }
-        else{
+            props.setMovieMeets(movieMeetJSON)
+        })
+        .catch(err => {
+            console.log(err)
             setErrorMessage("username or password incorrect")
-        }
-
-
-        }
+        })
+            
+            
+    }
     
     
     return (

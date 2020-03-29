@@ -11,18 +11,14 @@ const Auth = (props) => {
         case AuthAction.LOGIN:
            
             return (
-            <div class = "modal">
-                <div class = "modal-content">
-                    <Login setAuth = {props.setAuth}/>
-                </div>
-            </div>
+            
             )
         case AuthAction.LOGOUT:
         
-            return <Logout setAuth = {props.setAuth}/>
+            return <Logout />
         case AuthAction.REGISTOR:
-            console.log(3)
-            return <Register setAuth = {props.setAuth}/>
+            
+            return <Register />
         default:
             return null
     }

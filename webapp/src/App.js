@@ -1,8 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
-import Auth from './authComponent/Auth'
 import {AuthAction} from "./const/authAction.js"
 import Main from "./Main"
-import Logout from "./authComponent/Logout"
+import {getMovieMeet} from "./movieUtil"
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,29 +11,52 @@ import {
 } from "react-router-dom";
 
 import New from "./New"
+import Auth from "./Auth"
+
 import "./public/Main.css"
+import "./public/TopNav.css"
+import { logout } from './authUtil.js';
 
 function App() {
 
 
   const [newPopup, setNewPopup] = useState(false)
   
+  const [movieMeets, setMovieMeets] = useState([])
 
+  useEffect(() => {
+
+   getMovieMeet()
+   .then((movieMeetJSON) => {
+
+        setMovieMeets(movieMeetJSON)
+          console.log(movieMeetJSON)
+        }).catch((err) => {
+          console.log(err)
+        })
+      },[])
 
   return (
     
     <div className="App">
       
-      <h1>MovieMeets!</h1>
+      <div class = "top-nav">
+      <div>MovieMeets!</div>
       
+      <div class = "nav-button" onClick = {() => 
+      {if (logout()){
+        window.location.href = "auth/login"
+
+      }} }>logout</div>
+      
+      <div class = "nav-button" onClick = {() => setNewPopup(true)}>Create</div>
+      </div>
       
       
 
-      <button onClick = {() => setNewPopup(true)}>Create</button>
+       <Main movieMeets = {movieMeets} setMovieMeets = {setMovieMeets}/>
 
-       <Main/>
-
-       {(newPopup)?<New setNewPopup = {setNewPopup}/>:null}
+      {(newPopup)?<New setNewPopup = {setNewPopup} setMovieMeets = {setMovieMeets}/>:null}
     
       <div class = "footer">i am bottom</div>
     </div>
